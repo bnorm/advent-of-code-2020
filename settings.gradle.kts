@@ -1,5 +1,6 @@
 rootProject.name = "advent-of-code-2020"
 
 include(":util")
-include(":day-01")
-include(":day-02")
+for (i in 1..7) {
+    include(":day-${i.toString().padStart(2, '0')}")
+}
