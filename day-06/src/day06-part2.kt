@@ -22,9 +22,9 @@ fun main() {
 
     val groups = input
         .map { it.trim().splitToSequence("\n").map { it.toSet() } }
-        .map { it.reduce { next, acc -> next union acc } }
+        .map { it.reduce { next, acc -> next intersect acc } }
         .toList()
 
-    println("part1 = $groups")
-    println("part1 = ${groups.map { it.size }.sum()}")
+    println("part2 = $groups")
+    println("part2 = ${groups.map { it.size }.sum()}")
 }
