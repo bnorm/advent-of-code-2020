@@ -17,11 +17,11 @@ fun main() {
         b
     """.trimIndent()
 
-//    val input = sample.splitToSequence("\n\n")
-    val input = readResourceText("input.txt").splitToSequence("\n\n")
+//    val input = sample.trim().splitToSequence("\n\n")
+    val input = readResourceText("input.txt").trim().splitToSequence("\n\n")
 
     val groups = input
-        .map { it.trim().splitToSequence("\n").map { it.toSet() } }
+        .map { it.splitToSequence("\n").map { it.toSet() } }
         .map { it.reduce { next, acc -> next intersect acc } }
         .toList()
 
