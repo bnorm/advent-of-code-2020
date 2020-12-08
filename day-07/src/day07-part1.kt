@@ -14,13 +14,11 @@ fun main() {
 //    val input = sample.trim().splitToSequence("\n")
     val input = readResourceText("input.txt").trim().splitToSequence("\n")
 
-    val bagRegex = "(.*?) bags contain (.*?).".toRegex()
-    val subBagRegex = "(\\d+) (.*?) bag[s]?".toRegex()
     val bags = input.map { line ->
-        val (color, subBags) = bagRegex.matchEntire(line)!!.destructured
+        val (color, subBags) = line.extract("(.*?) bags contain (.*?).")!!
         val bags = if ("no other bags" !in subBags) {
             subBags.split(", ").map { subBag ->
-                val (count, subBagColor) = subBagRegex.matchEntire(subBag)!!.destructured
+                val (count, subBagColor) = subBag.extract("(\\d+) (.*?) bag[s]?")!!
                 subBagColor to count.toInt()
             }.toMap()
         } else emptyMap()
