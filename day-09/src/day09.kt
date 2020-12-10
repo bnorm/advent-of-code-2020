@@ -30,12 +30,9 @@ fun main() {
         .windowed(26)
         .filter { window ->
             val target = window.last()
-
-            for (i in 0 until window.lastIndex - 1) {
-                for (j in 1 until window.lastIndex) {
-                    if (window[i] != window[j] && window[i] + window[j] == target) {
-                        return@filter false
-                    }
+            indexPairs(window.size - 1) { i, j ->
+                if (window[i] != window[j] && window[i] + window[j] == target) {
+                    return@filter false
                 }
             }
             true
@@ -43,7 +40,7 @@ fun main() {
         .map { it.last() }
         .single()
 
-    println(result)
+    println("part1=$result")
 
     var start = 0
     var end = 0
@@ -60,5 +57,5 @@ fun main() {
     val sub = values.subList(start, end)
     val min = sub.minOrNull()!!
     val max = sub.maxOrNull()!!
-    println("result=${min + max}")
+    println("part2=${min + max}")
 }
