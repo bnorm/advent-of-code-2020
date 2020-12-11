@@ -15,7 +15,7 @@ fun main() {
     val input = readResourceText("input.txt").trim().splitToSequence("\n")
 
     val bags = input.map { line ->
-        val (color, subBags) = line.extract("(.*?) bags contain (.*?).")!!
+        val (color, subBags) = line.extract("(.*?) bags contain (.*?)\\.")!!
         val bags = if ("no other bags" !in subBags) {
             subBags.split(", ").map { subBag ->
                 val (count, subBagColor) = subBag.extract("(\\d+) (.*?) bag[s]?")!!

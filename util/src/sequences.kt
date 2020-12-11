@@ -13,3 +13,9 @@ fun <T> Sequence<T>.chunked(
         yield(group)
     }
 }
+
+fun <T> Sequence<T>.untilStable(): T =
+    windowed(2) { (prev, next) -> next.takeIf { it != prev } }
+        .takeWhile { it != null }
+        .filterNotNull()
+        .last()

@@ -100,9 +100,9 @@ fun permutations(values: List<Int>): Int {
 private fun dynamic(values: List<Int>): Long {
     // values = [ 0, 1, 2, 3, 6, 7, 8, 9,10,11,14]
     // memory = [ 1, 1, 2, 4, 4, 4, 8,16,28,52,52]
-    // sum of previous 3 that are within 4
+    // sum of previous 3 whose values are within at most 3
 
-    return dynamic(values) { i, memory ->
+    return dynamic(values.size) { i, memory ->
         var sum = 0L
         for (j in maxOf(0, i - 3) until i) {
             if (values[i] - values[j] <= 3) {
