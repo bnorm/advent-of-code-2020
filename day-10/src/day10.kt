@@ -59,6 +59,10 @@ fun main() {
 
     println("part1=${part1[1]!! * part1[3]!!}")
 
+    println("part2=${dynamic(values)}")
+}
+
+private fun recursive(values: List<Int>): Long {
     var count = 1L
     var start = 0
     var end = 0
@@ -72,7 +76,12 @@ fun main() {
             start = end
         }
     }
-    println("part2=$count")
+    if (end > 0 && values[end] - values[end - 1] < 3) {
+        val sub = values.subList(start, end + 1)
+        val permutations = permutations(sub)
+        count *= permutations
+    }
+    return count
 }
 
 fun permutations(values: List<Int>): Int {
@@ -86,4 +95,20 @@ fun permutations(values: List<Int>): Int {
         count += permutations(values.subList(i + 2, values.size))
     }
     return count
+}
+
+private fun dynamic(values: List<Int>): Long {
+    // values = [ 0, 1, 2, 3, 6, 7, 8, 9,10,11,14]
+    // memory = [ 1, 1, 2, 4, 4, 4, 8,16,28,52,52]
+    // sum of previous 3 that are within 4
+
+    return dynamic(values) { i, memory ->
+        var sum = 0L
+        for (j in maxOf(0, i - 3) until i) {
+            if (values[i] - values[j] <= 3) {
+                sum += memory[j]
+            }
+        }
+        maxOf(sum, 1L)
+    }
 }
