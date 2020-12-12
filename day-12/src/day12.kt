@@ -1,9 +1,4 @@
 import kotlin.math.abs
-import kotlin.math.atan2
-import kotlin.math.cos
-import kotlin.math.round
-import kotlin.math.sin
-import kotlin.math.sqrt
 
 fun main() {
     val sample = """
@@ -47,19 +42,15 @@ fun main() {
         var sX = 0
         var sY = 0
         for ((cmd, amount) in commands) {
-            println("$cmd $amount")
             when (cmd) {
-                "R" -> {
-                    val angle = atan2(wY.toDouble(), wX.toDouble()) - Math.toRadians(amount.toDouble())
-                    val dist = sqrt(wY.toDouble() * wY.toDouble() + wX.toDouble() * wX.toDouble())
-                    wX = round(dist * cos(angle)).toInt()
-                    wY = round(dist * sin(angle)).toInt()
-                }
-                "L" -> {
-                    val angle = atan2(wY.toDouble(), wX.toDouble()) + Math.toRadians(amount.toDouble())
-                    val dist = sqrt(wY.toDouble() * wY.toDouble() + wX.toDouble() * wX.toDouble())
-                    wX = round(dist * cos(angle)).toInt()
-                    wY = round(dist * sin(angle)).toInt()
+                "R", "L" -> {
+                    var rotation = if (cmd == "R") amount else 360 - amount
+                    while (rotation > 0) {
+                        val tmp = wX
+                        wX = wY
+                        wY = -tmp
+                        rotation -= 90
+                    }
                 }
                 "N" -> wY += amount
                 "E" -> wX += amount
@@ -70,7 +61,6 @@ fun main() {
                     sY += wY * amount
                 }
             }
-            println("$wX, $wY & $sX, $sY")
         }
         println("part2=${abs(sX) + abs(sY)}")
     }
