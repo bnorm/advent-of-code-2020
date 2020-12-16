@@ -1,3 +1,6 @@
+import kotlin.system.measureTimeMillis
+import kotlin.time.measureTime
+
 fun main() {
     val sample = """
         0,3,6
@@ -11,35 +14,41 @@ fun main() {
     val sequence = sequence {
         val memory0 = mutableMapOf<Long, Int>()
         val memory1 = mutableMapOf<Long, Int>()
+        var prev = -1L
         var i = 0
-        fun commitToMemory(n: Long) {
-            val prev = memory0[n]
-            memory0[n] = i++
-            if (prev != null) memory1[n] = prev
+
+        fun commit(n: Long) {
+            prev = n
+            val tmp = memory0.put(n, i++)
+            if (tmp != null) memory1[n] = tmp
         }
 
         for (n in startingNumbers) {
             yield(n)
-            commitToMemory(n)
+            commit(n)
         }
 
-        var prev = startingNumbers.last()
         while (true) {
-            // latest index is always (i - 1) because it was the previous value
-            val n = ((i - 1) - (memory1[prev] ?: (i - 1))).toLong()
+            val h0 = i - 1
+            val h1 = memory1[prev] ?: h0
+            val n = (h0 - h1).toLong()
+
             yield(n)
-            commitToMemory(n)
-            prev = n
+            commit(n)
         }
     }
 
-    val part1 = sequence
-        .take(2020)
-        .last()
-    println("part1=$part1")
+    println(measureTimeMillis {
+        val part1 = sequence
+            .take(2020)
+            .last()
+        println("part1=$part1")
+    })
 
-    val part2 = sequence
-        .take(30_000_000)
-        .last()
-    println("part1=$part2")
+    println(measureTimeMillis {
+        val part2 = sequence
+            .take(30_000_000)
+            .last()
+        println("part2=$part2")
+    })
 }
